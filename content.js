@@ -1,21 +1,23 @@
 (function() {
-    let $textArea = $('#markdown');
-
-    appendPreviewDiv($textArea);
-    
-    $('#markdown').keydown(debounce(function() {
-        if ($textArea.val().length == 0) {
-            $('#markdown-preview-div').hide();
-        } else {
-            $('#markdown-preview').html(marked($textArea.val()));
-            $('#markdown-preview-div').show();
-        }
+    $('body').keydown(debounce(function(e) {
+		let $targetArea = $(e.target);
+		let $targetParent = $targetArea.parent()
+		if ($targetParent.has('#markdown-preview-div').length == 0) {
+			appendPreviewDiv($targetArea);
+		}
+		if ($targetArea.val().length == 0) {
+			$targetParent.find('#markdown-preview-div').hide();
+		} else {
+			$targetParent.find('#markdown-preview').html(marked($targetArea.val()));
+			$targetParent.find('#markdown-preview-div').show();
+		}
     }, 300));
+
 })();
 
 function appendPreviewDiv($textArea) {
     let divForComments = '<div id="markdown-preview-div"><hr/><div><h2>Live preview</h2><div id="markdown-preview"></div></div></div>';
-	let divForPosts = '<div id="markdown-preview-div"><div class="divider"></div><div><label class="form-label">Live preview</label><br><div id="markdown-preview"></div></div></div>';
+	let divForPosts = '<div id="markdown-preview-div"><div class="divider"></div><div><label class="form-label">Live preview</label><br><div id="markdown-preview"></div><br></div></div>';
 
     let $form = $textArea.parent();
 
